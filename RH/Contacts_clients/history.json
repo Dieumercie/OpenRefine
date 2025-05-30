@@ -1,0 +1,226 @@
+[
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "Ville",
+          "expression": "value",
+          "columnName": "Ville",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "Marselle",
+                "l": "Marselle"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "columnName": "Ville",
+    "expression": "value.replace(\"Marselle\",\"Marseille\")",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Ville à laide de lexpression value.replace(\"Marselle\",\"Marseille\")"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "Ville",
+          "expression": "value",
+          "columnName": "Ville",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": "marsEille",
+                "l": "marsEille"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "columnName": "Ville",
+    "expression": "value.replace(\"marsEille\",\"Marseille\")",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Ville à laide de lexpression value.replace(\"marsEille\",\"Marseille\")"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Nom",
+    "expression": "value.toTitlecase()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Nom à laide de lexpression value.toTitlecase()"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Prénom",
+    "expression": "value.toTitlecase()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Prénom à laide de lexpression value.toTitlecase()"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "list",
+          "name": "Téléphone",
+          "expression": "facetCount(value, 'value', 'Téléphone') > 1",
+          "columnName": "Téléphone",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": true,
+                "l": "true"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        },
+        {
+          "type": "list",
+          "name": "Lignes marquées",
+          "expression": "row.flagged",
+          "columnName": "",
+          "invert": false,
+          "omitBlank": false,
+          "omitError": false,
+          "selection": [
+            {
+              "v": {
+                "v": true,
+                "l": "true"
+              }
+            }
+          ],
+          "selectBlank": false,
+          "selectError": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Supprimer les lignes"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Nom",
+    "expression": "join ([coalesce(cells['Nom'].value,''),coalesce(cells['Prénom'].value,'')],' ')",
+    "onError": "keep-original",
+    "newColumnName": "Nom complet",
+    "columnInsertIndex": 1,
+    "description": "Créer la colonne Nom complet à lindex {1} sur la base de la colonne {2} à laide de lexpression {3}"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "Nom complet",
+    "index": 5,
+    "description": "Déplacer la colonne Nom complet vers la position 5"
+  },
+  {
+    "op": "core/mass-edit",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Email",
+    "expression": "value",
+    "edits": [
+      {
+        "from": [
+          "claire.martin@email"
+        ],
+        "fromBlank": false,
+        "fromError": false,
+        "to": "claire.martin@email.com"
+      }
+    ],
+    "description": "Modification en masse des cellules de la colonne Email"
+  },
+  {
+    "op": "core/column-split",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Email",
+    "guessCellType": true,
+    "removeOriginalColumn": false,
+    "mode": "separator",
+    "separator": "@",
+    "regex": true,
+    "maxColumns": 2,
+    "description": "Diviser la colonne Email par le séparateur"
+  },
+  {
+    "op": "core/column-removal",
+    "columnName": "Email 1",
+    "description": "Supprimer la colonne Email 1"
+  },
+  {
+    "op": "core/column-rename",
+    "oldColumnName": "Email 2",
+    "newColumnName": "Domaine Email",
+    "description": "Renommer la colonne Email 2} en Domaine Email"
+  },
+  {
+    "op": "core/mass-edit",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Domaine Email",
+    "expression": "value",
+    "edits": [
+      {
+        "from": [
+          "email.com"
+        ],
+        "fromBlank": false,
+        "fromError": false,
+        "to": "email"
+      }
+    ],
+    "description": "Modification en masse des cellules de la colonne Domaine Email"
+  }
+]
