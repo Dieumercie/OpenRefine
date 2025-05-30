@@ -1,0 +1,188 @@
+[
+  {
+    "op": "core/mass-edit",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Ville",
+    "expression": "value",
+    "edits": [
+      {
+        "from": [
+          "PARIS",
+          "Paris",
+          "paris"
+        ],
+        "fromBlank": false,
+        "fromError": false,
+        "to": "Paris"
+      },
+      {
+        "from": [
+          "Marseille",
+          "marSeille"
+        ],
+        "fromBlank": false,
+        "fromError": false,
+        "to": "Marseille"
+      },
+      {
+        "from": [
+          "Lyon",
+          "lyon"
+        ],
+        "fromBlank": false,
+        "fromError": false,
+        "to": "Lyon"
+      }
+    ],
+    "description": "Modification en masse des cellules de la colonne Ville"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Nom",
+    "expression": "value.toTitlecase()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Nom à laide de lexpression value.toTitlecase()"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Prénom",
+    "expression": "value.toTitlecase()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Prénom à laide de lexpression value.toTitlecase()"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Poste",
+    "expression": "value.toTitlecase()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Poste à laide de lexpression value.toTitlecase()"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Salaire",
+    "expression": "value.toNumber()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Salaire à laide de lexpression value.toNumber()"
+  },
+  {
+    "op": "core/row-duplicate-removal",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "criteria": [
+      "ID",
+      "Nom",
+      "Prénom",
+      "Email",
+      "Date Embauche",
+      "Poste",
+      "Salaire",
+      "Ville"
+    ],
+    "description": "Supprimer les lignes en double"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Email",
+    "expression": "grel:if(isBlank(value),\"vide\",if(value.contains(\"@\"),\"Valide\", \"Invalide\"))",
+    "onError": "set-to-blank",
+    "newColumnName": "Validité email",
+    "columnInsertIndex": 4,
+    "description": "Créer la colonne Validité email à lindex {1} sur la base de la colonne {2} à laide de lexpression {3}"
+  },
+  {
+    "op": "core/row-removal",
+    "engineConfig": {
+      "facets": [
+        {
+          "type": "text",
+          "name": "Validité email",
+          "columnName": "Validité email",
+          "query": "Invalide",
+          "mode": "text",
+          "caseSensitive": false,
+          "invert": false
+        }
+      ],
+      "mode": "row-based"
+    },
+    "description": "Supprimer les lignes"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Nom",
+    "expression": "grel:cells[\"Nom\"].value+ \" \"+cells[\"Prénom\"].value",
+    "onError": "set-to-blank",
+    "newColumnName": "Nom Complet",
+    "columnInsertIndex": 2,
+    "description": "Créer la colonne Nom Complet à lindex {1} sur la base de la colonne {2} à laide de lexpression {3}"
+  },
+  {
+    "op": "core/column-move",
+    "columnName": "Nom Complet",
+    "index": 3,
+    "description": "Déplacer la colonne Nom Complet vers la position 3"
+  },
+  {
+    "op": "core/text-transform",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "Date Embauche",
+    "expression": "value.toDate()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10,
+    "description": "Transformer le texte sur les cellules de la colonne Date Embauche à laide de lexpression value.toDate()"
+  },
+  {
+    "op": "core/column-addition",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "baseColumnName": "Date Embauche",
+    "expression": "grel:diff(now(),value,\"days\")",
+    "onError": "set-to-blank",
+    "newColumnName": "Ancienneté",
+    "columnInsertIndex": 7,
+    "description": "Créer la colonne Ancienneté à lindex {1} sur la base de la colonne {2} à laide de lexpression {3}"
+  }
+]
